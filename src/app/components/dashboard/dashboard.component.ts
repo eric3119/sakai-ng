@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuItem } from 'primeng/api';
-import { Product } from '../../api/product';
-import { ProductService } from '../../service/productservice';
+import { Product } from '../../examples/uikit/api/product';
 import { Subscription } from 'rxjs';
 import { ConfigService } from '../../service/app.config.service';
 import { AppConfig } from '../../api/appconfig';
- 
+import { ProductService } from 'src/app/examples/uikit/services/productservice';
+
 @Component({
     templateUrl: './dashboard.component.html',
 })
@@ -32,7 +32,7 @@ export class DashboardComponent implements OnInit {
             this.updateChartOptions();
         });
         this.productService.getProductsSmall().then(data => this.products = data);
-          
+
         this.items = [
             {label: 'Add New', icon: 'pi pi-fw pi-plus'},
             {label: 'Remove', icon: 'pi pi-fw pi-minus'}

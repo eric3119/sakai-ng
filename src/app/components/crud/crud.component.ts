@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Product } from '../../api/product';
-import { ProductService } from '../../service/productservice';
+import { Product } from '../../examples/uikit/api/product';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { ProductService } from 'src/app/examples/uikit/services/productservice';
 
 @Component({
     templateUrl: './crud.component.html',

@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { SelectItem } from 'primeng/api';
 import { Product } from '../../api/product';
-import { ProductService } from '../../service/productservice';
+import { ProductService } from '../../services/productservice';
 
 @Component({
     templateUrl: './list.component.html',
-    styleUrls: ['../../../assets/demo/badges.scss']
+    styleUrls: ['../../../../../assets/demo/badges.scss']
 })
 export class ListComponent implements OnInit {
 
