@@ -8,7 +8,6 @@ import { ProductService } from '../../services/productservice';
 
 @Component({
     templateUrl: './table.component.html',
-    providers: [MessageService, ConfirmationService],
     styleUrls: ['../../../../../assets/demo/badges.scss'],
     styles: [`
         :host ::ng-deep  .p-frozen-column {

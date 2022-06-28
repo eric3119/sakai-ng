@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { ToastrService } from 'ngx-toastr';
+import { MessageService } from 'primeng/api';
 import { BehaviorSubject, concat, Observable, of } from 'rxjs';
 import { catchError, first, map, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
@@ -25,7 +25,7 @@ export class AuthService {
     constructor(
         private http: HttpClient,
         public router: Router,
-        private toastrService: ToastrService,
+        private messageService: MessageService
     ) {
         this.token = localStorage.getItem('token');
         try {
@@ -46,7 +46,7 @@ export class AuthService {
         return concat(requisicaoLogin, this.getDadosLogin().pipe(first()));
     }
 
-    armazenaToken = (res: { token: string | null }) => {
+    private armazenaToken = (res: { token: string | null }) => {
         this.token = res.token;
         this.userauthenticated = !!this.token;
         if (!this.token) return;
@@ -55,9 +55,11 @@ export class AuthService {
         const tokenExpirationDate =
             this.jwtHelperService.getTokenExpirationDate(this.token);
         if (!tokenExpirationDate) {
-            this.toastrService.error(
-                '[JWT Token] Não foi possível decodificar o token'
-            );
+            this.messageService.add({
+                severity: 'error',
+                summary: 'JWT Token',
+                detail: 'Não foi possível decodificar o token',
+            });
         } else {
             localStorage.setItem(
                 'expiration_time',
@@ -88,10 +90,19 @@ export class AuthService {
                             // );
                             this.loading.next(false);
                         },
-                        (err) => this.toastrService.error(err)
+                        (err) =>
+                            this.messageService.add({
+                                severity: 'error',
+                                summary: 'Erro na API',
+                                detail: err,
+                            })
                     ),
                     catchError(() => {
-                        this.toastrService.error('Erro na autenticação');
+                        this.messageService.add({
+                            severity: 'error',
+                            summary: 'Autenticação',
+                            detail: 'Erro ao autenticar o usuário',
+                        });
                         this.logout();
                         return of(new Error('Erro nos dados de login'));
                     })
@@ -151,7 +162,9 @@ export class AuthService {
             return of(this.dadosLogin['dados']);
         } else {
             return this.http
-                .get<DadosColaborador[]>(this.url + 'colaboradoresdadosbasicos/')
+                .get<DadosColaborador[]>(
+                    this.url + 'colaboradoresdadosbasicos/'
+                )
                 .pipe(map((res) => res[0]));
         }
     }

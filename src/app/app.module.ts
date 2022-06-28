@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -13,7 +13,6 @@ import { AppComponent } from './app.component';
 import { AppMainComponent } from './app.main.component';
 import { AppTopBarComponent } from './app.topbar.component';
 import { AppFooterComponent } from './app.footer.component';
-import { AppConfigComponent } from './app.config.component';
 import { AppMenuComponent } from './app.menu.component';
 import { AppMenuitemComponent } from './app.menuitem.component';
 
@@ -45,6 +44,10 @@ import { CustomerService } from './examples/uikit/services/customerservice';
 import { NodeService } from './examples/uikit/services/nodeservice';
 import { ProductService } from './examples/uikit/services/productservice';
 import { PrimeNGUtilsModule } from './primeng-utils.module';
+import { JwtInterceptor } from './interceptor/jwt.interceptor';
+import { ErrorInterceptor } from './interceptor/error.interceptor';
+import { AppConfigComponent } from './core/config/app.config.component';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 @NgModule({
     imports: [
@@ -85,6 +88,10 @@ import { PrimeNGUtilsModule } from './primeng-utils.module';
     ],
     providers: [
         { provide: LocationStrategy, useClass: HashLocationStrategy },
+        { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+        { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+        MessageService,
+        ConfirmationService,
         CountryService,
         CustomerService,
         EventService,

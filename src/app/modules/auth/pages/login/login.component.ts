@@ -1,5 +1,7 @@
-﻿import { Component, OnInit } from '@angular/core';
+﻿import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { AppConfig } from 'src/app/api/appconfig';
+import { ConfigService } from 'src/app/service/app.config.service';
 import { AuthService } from 'src/app/service/auth.service';
 import { environment } from 'src/environments/environment';
 
@@ -13,7 +15,7 @@ import { User } from '../../models';
     templateUrl: 'login.component.html',
     styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
     userData: User;
     loading = false;
     submitted = false;
@@ -21,13 +23,12 @@ export class LoginComponent implements OnInit {
     config: AppConfig;
 
     showPassword = false;
+    subscriptions: Subscription[] = [];
 
     constructor(
-        private authService: AuthService
-    ) // private alertService: AlertService,
-    // public availService: AvailabilityService,
-    // public darkThemeService: DarkThemeService,
-    {
+        private authService: AuthService,
+        public configService: ConfigService // private alertService: AlertService, // public availService: AvailabilityService, // public darkThemeService: DarkThemeService,
+    ) {
         // redirect to home if already logged in
         // if (this.authenticationService.current_user) {
         //   this.authenticationService.redirect();
@@ -36,13 +37,23 @@ export class LoginComponent implements OnInit {
 
     ngOnInit() {
         this.userData = new User();
+        this.config = this.configService.config;
+        this.subscriptions.push(
+            this.configService.configUpdate$.subscribe((config) => {
+                this.config = config;
+            })
+        );
+    }
+
+    ngOnDestroy(): void {
+        this.subscriptions.forEach((sub) => sub.unsubscribe());
     }
 
     onSubmit() {
         this.submitted = true;
         this.loading = true;
         this.authService.login(this.userData).subscribe({
-            next: (_) => {
+            next: () => {
                 // this.authService.redirect(this.returnUrl, () => {
                 //     this.loading = false;
                 // });

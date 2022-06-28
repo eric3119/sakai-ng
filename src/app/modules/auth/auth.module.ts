@@ -6,11 +6,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AuthRoutingModule } from './auth-routing.module';
 
 import { LoginComponent } from './pages/login/login.component';
-
-import {
-    ErrorInterceptor,
-    JwtInterceptor
-} from './helpers';
 import { PrimeNGUtilsModule } from 'src/app/primeng-utils.module';
 
 @NgModule({
@@ -22,8 +17,6 @@ import { PrimeNGUtilsModule } from 'src/app/primeng-utils.module';
     PrimeNGUtilsModule,
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
   ],
 })
 export class AuthModule {}

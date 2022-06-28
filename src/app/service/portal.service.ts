@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
+import { MessageService } from 'primeng/api';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 
 export type PortaisRotas = {
@@ -38,7 +38,7 @@ export class PortalService {
         return this._loading.asObservable();
     }
 
-    constructor(private toastr: ToastrService, private router: Router) {}
+    constructor(private messageService: MessageService, private router: Router) {}
 
     setRole(role: keyof PortaisRotas) {
         this.current_role = role;
@@ -66,7 +66,7 @@ export class PortalService {
 
     isRole(role: keyof PortaisRotas | (keyof PortaisRotas)[]) {
         if (!this.current_role) {
-            this.toastr.info('Papel não definido');
+            this.messageService.add({severity:'info', summary: 'Info', detail: 'Papel não definido'});
             return false;
         }
         if (Array.isArray(role)) {

@@ -6,7 +6,6 @@ import { ProductService } from '../../services/productservice';
 
 @Component({
     templateUrl: './overlays.component.html',
-    providers: [ConfirmationService, MessageService]
 })
 export class OverlaysComponent implements OnInit {
 

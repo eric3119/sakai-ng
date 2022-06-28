@@ -5,7 +5,6 @@ import { ProductService } from 'src/app/examples/uikit/services/productservice';
 
 @Component({
     templateUrl: './crud.component.html',
-    providers: [MessageService, ConfirmationService],
     styleUrls: ['../../../assets/demo/badges.scss']
 })
 export class CrudComponent implements OnInit {
